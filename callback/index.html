@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ready Korea — OAuth 콜백</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 40rem; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; }
+    code, textarea { word-break: break-all; font-size: 0.9rem; }
+    textarea { width: 100%; min-height: 6rem; }
+    .ok { color: #0a7; }
+    .err { color: #c22; }
+  </style>
+</head>
+<body>
+  <h1>승인 코드</h1>
+  <p id="status">주소를 읽는 중…</p>
+  <textarea id="out" readonly></textarea>
+  <p>위 전체 주소를 복사해서 Tesla Ready Korea 채팅에 붙여 주세요. 코드만 보내도 됩니다.</p>
+  <script>
+    const p = new URLSearchParams(location.search);
+    const code = p.get('code');
+    const err = p.get('error');
+    const st = document.getElementById('status');
+    const out = document.getElementById('out');
+    if (err) {
+      st.className = 'err';
+      st.textContent = '승인 실패: ' + err + (p.get('error_description') ? ' — ' + p.get('error_description') : '');
+      out.value = location.href;
+    } else if (code) {
+      st.className = 'ok';
+      st.textContent = '승인 코드를 받았습니다. 아래를 복사해 채팅에 붙여 주세요.';
+      out.value = location.href;
+      out.select();
+    } else {
+      st.textContent = 'code 파라미터가 없습니다. OAuth 링크에서 다시 승인해 주세요.';
+      out.value = location.href;
+    }
+  </script>
+</body>
+</html>
